@@ -4,6 +4,7 @@ package ru.altarix.thegreatestnotes.model;
  * Created by mariya on 29.09.15.
  */
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
+import com.nineoldandroids.view.ViewHelper;
+
 import ru.altarix.thegreatestnotes.R;
 
 public class ListViewAdapter extends BaseSwipeAdapter {
@@ -34,6 +37,45 @@ public class ListViewAdapter extends BaseSwipeAdapter {
     public View generateView(int position, ViewGroup parent) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);
         SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
+
+        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, swipeLayout.findViewById(R.id.bottom_wrapper_2));
+
+        swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        swipeLayout.getSurfaceView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                return true;
+            }
+        });
+        swipeLayout.findViewById(R.id.star2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        swipeLayout.findViewById(R.id.trash2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        swipeLayout.findViewById(R.id.magnifier2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        /*
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {
@@ -51,7 +93,8 @@ public class ListViewAdapter extends BaseSwipeAdapter {
             public void onClick(View view) {
                 Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
             }
-        });
+        }); */
+
         return v;
     }
 
