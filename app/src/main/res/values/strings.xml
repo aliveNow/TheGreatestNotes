@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">TheGreatestNotes</string>
+    <string name="app_name">Заметки</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_edit_note">EditNoteActivity</string>
+    <string name="title_activity_edit_note">Редактирование</string>
+    <string name="title_activity_show_note">Просмотр</string>
     <string name="add_note">Добавить заметку</string>
     <string name="save_note">Сохранить</string>
     <string name="edit_note">Редактировать</string>

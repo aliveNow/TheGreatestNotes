@@ -17,7 +17,8 @@ public class EditNoteActivity extends AppCompatActivity {
     private Note note;
     private TextView titleView;
     private TextView textView;
-    private boolean editable;
+    boolean editable = false;
+    boolean wasShowActivity = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +30,17 @@ public class EditNoteActivity extends AppCompatActivity {
 
         titleView = (TextView) findViewById(R.id.editTitle);
         textView = (TextView) findViewById(R.id.editText);
+        editable = intent.getBooleanExtra(EDITABLE_KEY, false);
+        wasShowActivity = !editable;
+        prepareViews();
+    }
+
+    protected void prepareViews() {
         titleView.setText(note.getTitle());
         textView.setText(note.getText());
-        setEditable(intent.getBooleanExtra(EDITABLE_KEY, false));
+        titleView.setEnabled(editable);
+        textView.setEnabled(editable);
+        setTitle(editable ? R.string.title_activity_edit_note : R.string.title_activity_show_note);
     }
 
     @Override
@@ -52,13 +61,9 @@ public class EditNoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.edit_note :
-                setEditable(true);
-                invalidateOptionsMenu();
+                updateEditable(true);
                 break;
             case R.id.save_note :
                 note.setTitle(titleView.getText().toString());
@@ -70,12 +75,22 @@ public class EditNoteActivity extends AppCompatActivity {
                 finish();
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    public void setEditable(boolean editable){
+    @Override
+    public void onBackPressed() {
+        if (editable && wasShowActivity) {
+            updateEditable(false);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    protected void updateEditable(boolean editable) {
         this.editable = editable;
-        titleView.setEnabled(editable);
-        textView.setEnabled(editable);
+        prepareViews();
+        invalidateOptionsMenu();
     }
 }
