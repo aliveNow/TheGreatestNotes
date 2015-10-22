@@ -1,61 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<com.daimajia.swipe.SwipeLayout
-    xmlns:swipe="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipe"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
-    <LinearLayout
-        android:tag="Bottom4"
-        android:id="@+id/bottom_wrapper_2"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/magnifier2"
-            android:src="@mipmap/magnifier"
-            android:layout_width="70dp"
-            android:background="#f7e79c"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:id="@+id/star2"
-            android:src="@mipmap/star"
-            android:layout_width="70dp"
-            android:background="#4cd964"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:id="@+id/trash2"
-            android:src="@mipmap/trash"
-            android:background="#bebebe"
-            android:layout_width="70dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/text_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:tag="Hover"
+        android:text="Do not, for one repulse, forgot the purpose that you resolved to effort. " />
 
-        <TextView
-            android:id="@+id/position"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/text_data"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:tag="Hover"
-            android:text="Do not, for one repulse, forgot the purpose that you resolved to effort. " />
-    </LinearLayout>
-
-</com.daimajia.swipe.SwipeLayout>
+</LinearLayout>

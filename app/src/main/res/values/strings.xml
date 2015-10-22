@@ -3,4 +3,16 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_edit_note">EditNoteActivity</string>
+    <string name="add_note">Добавить заметку</string>
+    <string name="save_note">Сохранить</string>
+    <string name="edit_note">Редактировать</string>
+    <string name="remove_note">Удалить</string>
+    <string name="delete_note">Удалить</string>
+
+    <string-array name="note_menu">
+        <item>text_string</item>
+        <item>text_string2</item>
+        <item>text_string3</item>
+    </string-array>
 </resources>
