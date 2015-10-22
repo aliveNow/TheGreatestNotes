@@ -36,26 +36,8 @@ public class NotesDataSource extends Observable implements ObjectManager<Note> {
         dbHelper.close();
     }
 
-    public Note createNote(String title, String text) {
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_TITLE, title);
-        values.put(DBHelper.COLUMN_TEXT, text);
-        long insertId = database.insert(DBHelper.TABLE_NOTES, null,
-                values);
-        Cursor cursor = database.query(DBHelper.TABLE_NOTES,
-                allColumns, DBHelper.COLUMN_ID + " = " + insertId, null,
-                null, null, null);
-        cursor.moveToFirst();
-        Note newNote = cursorToNote(cursor);
-        cursor.close();
-        notifyObservers(Action.INSERT, newNote);
-        return newNote;
-    }
-
     public void saveNote(Note note) {
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_TITLE, note.getTitle());
-        values.put(DBHelper.COLUMN_TEXT, note.getText());
+        ContentValues values = contentValuesFromNote(note);
         long insertId = database.insert(DBHelper.TABLE_NOTES, null,
                 values);
         note.setId(insertId);
@@ -63,11 +45,17 @@ public class NotesDataSource extends Observable implements ObjectManager<Note> {
     }
 
     public void updateNote(Note note) {
+        ContentValues values = contentValuesFromNote(note);
+        database.update(DBHelper.TABLE_NOTES, values, DBHelper.COLUMN_ID + " = " + note.getId(), null);
+        notifyObservers(Action.UPDATE, note);
+    }
+
+    private ContentValues contentValuesFromNote(Note note) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_TITLE, note.getTitle());
         values.put(DBHelper.COLUMN_TEXT, note.getText());
-        database.update(DBHelper.TABLE_NOTES, values, DBHelper.COLUMN_ID + " = " + note.getId(), null);
-        notifyObservers(Action.UPDATE, note);
+        values.put(DBHelper.COLUMN_DATETIME, System.currentTimeMillis());
+        return values;
     }
 
     public void deleteNote(Note note) {
@@ -82,7 +70,7 @@ public class NotesDataSource extends Observable implements ObjectManager<Note> {
         List<Note> notes = new ArrayList<Note>();
 
         Cursor cursor = database.query(DBHelper.TABLE_NOTES,
-                allColumns, null, null, null, null, null);
+                allColumns, null, null, null, null, DBHelper.COLUMN_DATETIME + " DESC");
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

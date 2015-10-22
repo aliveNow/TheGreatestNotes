@@ -14,16 +14,18 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_TEXT = "text";
+    public static final String COLUMN_DATETIME = "datetime";
 
     private static final String DATABASE_NAME = "notes.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database creation sql statement
     private static final String DATABASE_CREATE = "create table " + TABLE_NOTES
             + "("
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_TITLE + " text,"
-            + COLUMN_TEXT + " text not null"
+            + COLUMN_TEXT + " text not null,"
+            + COLUMN_DATETIME + " int"
             + ");";
 
     public DBHelper(Context context) {

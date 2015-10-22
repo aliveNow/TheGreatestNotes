@@ -59,10 +59,8 @@ public class ListViewNotesAdapter extends ArrayAdapter<Note> implements Observer
                 insert(note, 0);
                 break;
             case UPDATE:
-                int position = getPosition(note);
-                Note oldNote = getItem(position);
-                oldNote.updateValues(note);
-                notifyDataSetChanged();
+                remove(note);
+                insert(note, 0);
                 break;
             case DELETE:
                 remove(note);
