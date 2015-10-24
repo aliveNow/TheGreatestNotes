@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ru.altarix.thegreatestnotes.R;
+import ru.altarix.thegreatestnotes.utils.ImageUtils;
 
 /**
  * Created by samsmariya on 20.10.15.
@@ -37,6 +39,8 @@ public class ListViewNotesAdapter extends ArrayAdapter<Note> implements Observer
 
         TextView textView = (TextView) convertView.findViewById(R.id.text_data);
         textView.setText(note.getTitle());
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
+        ImageUtils.showThumbnailImage(getContext(), imageView, note.getImageUri());
 
         return convertView;
     }

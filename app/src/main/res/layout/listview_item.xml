@@ -6,6 +6,11 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
     <TextView
         android:id="@+id/text_data"
         android:layout_width="match_parent"

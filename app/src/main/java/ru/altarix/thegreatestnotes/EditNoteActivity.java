@@ -1,7 +1,6 @@
 package ru.altarix.thegreatestnotes;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -63,11 +62,8 @@ public class EditNoteActivity extends AppCompatActivity {
     }
 
     protected void showImage(Uri uri) {
-        if (uri != null) {
-            Bitmap bitmap = ImageUtils.getThumbnailBitmap(this, uri);
-            ImageView imageView = (ImageView) findViewById(R.id.imageView);
-            imageView.setImageBitmap(bitmap);
-        }
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        ImageUtils.showThumbnailImage(this, imageView, note.getImageUri());
     }
 
     @Override
