@@ -17,10 +17,14 @@
         </activity>
         <activity
             android:name=".EditNoteActivity"
-            android:label="@string/title_activity_edit_note">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".NotesListActivity" />
+            android:label="@string/title_activity_edit_note" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NotesListActivity" />
+        </activity>
+        <activity
+            android:name=".ShowImageActivity"
+            android:label="@string/title_activity_show_image" >
         </activity>
     </application>
 

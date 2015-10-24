@@ -14,4 +14,17 @@
         android:title="@string/delete_note"
         app:showAsAction="ifRoom"
         />
+
+    <item
+        android:id="@+id/add_picture"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/add_picture" />
+
+    <item
+        android:id="@+id/make_picture"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/make_picture" />
+
 </menu>

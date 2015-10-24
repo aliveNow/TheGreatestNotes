@@ -10,10 +10,14 @@
     <string name="edit_note">Редактировать</string>
     <string name="remove_note">Удалить</string>
     <string name="delete_note">Удалить</string>
+    <string name="add_picture">Добавить изображение</string>
+    <string name="make_picture">Сфотографировать</string>
+    <string name="choose_picture">Выбрать изображение</string>
 
     <string-array name="note_menu">
         <item>text_string</item>
         <item>text_string2</item>
         <item>text_string3</item>
     </string-array>
+    <string name="title_activity_show_image">ShowImageActivity</string>
 </resources>

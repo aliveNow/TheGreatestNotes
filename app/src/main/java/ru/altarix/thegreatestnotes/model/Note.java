@@ -1,5 +1,6 @@
 package ru.altarix.thegreatestnotes.model;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,6 +12,7 @@ public class Note implements Parcelable {
     private long id;
     private String title;
     private String text;
+    private Uri imageUri;
 
     public Note() {
     }
@@ -48,6 +50,10 @@ public class Note implements Parcelable {
     public void setText(String text) {
         this.text = text;
     }
+
+    public Uri getImageUri() { return imageUri; }
+
+    public void setImageUri(Uri imageUri) { this.imageUri = imageUri; }
 
     public void updateValues(Note note)
     {
