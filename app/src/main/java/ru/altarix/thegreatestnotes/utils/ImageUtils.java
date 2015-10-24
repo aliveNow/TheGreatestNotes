@@ -25,7 +25,7 @@ public class ImageUtils {
             result = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.DATA));
             cursor.close();
         }
-        return result.length() > 0 ? Uri.parse(result) : null;
+        return result != null ? Uri.parse(result) : null;
     }
 
     public static Bitmap getThumbnailBitmap(Context context, Uri uri) {

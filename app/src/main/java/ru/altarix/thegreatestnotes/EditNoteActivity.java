@@ -39,6 +39,8 @@ public class EditNoteActivity extends AppCompatActivity {
         editable = intent.getBooleanExtra(EDITABLE_KEY, false);
         wasShowActivity = !editable;
         prepareViews();
+        // FIXME: 24.10.15 как работает вызов onCreate? надо ли перезагружать рисунок каждый раз?
+        showImage(note.getImageUri());
 
         ImageView imgFavorite = (ImageView) findViewById(R.id.imageView);
         imgFavorite.setOnClickListener(new View.OnClickListener() {
@@ -60,15 +62,21 @@ public class EditNoteActivity extends AppCompatActivity {
         setTitle(editable ? R.string.title_activity_edit_note : R.string.title_activity_show_note);
     }
 
+    protected void showImage(Uri uri) {
+        if (uri != null) {
+            Bitmap bitmap = ImageUtils.getThumbnailBitmap(this, uri);
+            ImageView imageView = (ImageView) findViewById(R.id.imageView);
+            imageView.setImageBitmap(bitmap);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
             Uri imageUri = data.getData();
             note.setImageUri(imageUri);
-            Bitmap bitmap = ImageUtils.getThumbnailBitmap(this, imageUri);
-            ImageView imageView = (ImageView) findViewById(R.id.imageView);
-            imageView.setImageBitmap(bitmap);
+            showImage(imageUri);
         }
     }
 

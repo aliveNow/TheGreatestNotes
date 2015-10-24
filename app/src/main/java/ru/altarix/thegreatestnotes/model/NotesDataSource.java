@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.util.Log;
 
 /**
@@ -20,8 +21,12 @@ public class NotesDataSource extends Observable implements ObjectManager<Note> {
     // Database fields
     private SQLiteDatabase database;
     private DBHelper dbHelper;
-    private String[] allColumns = { DBHelper.COLUMN_ID,
-            DBHelper.COLUMN_TITLE, DBHelper.COLUMN_TEXT };
+    private String[] allColumns = {
+            DBHelper.COLUMN_ID,
+            DBHelper.COLUMN_TITLE,
+            DBHelper.COLUMN_TEXT,
+            DBHelper.COLUMN_IMAGE_URI
+    };
 
     public NotesDataSource(Context context) {
         dbHelper = new DBHelper(context);
@@ -55,6 +60,9 @@ public class NotesDataSource extends Observable implements ObjectManager<Note> {
         values.put(DBHelper.COLUMN_TITLE, note.getTitle());
         values.put(DBHelper.COLUMN_TEXT, note.getText());
         values.put(DBHelper.COLUMN_DATETIME, System.currentTimeMillis());
+        if (note.getImageUri() != null) {
+            values.put(DBHelper.COLUMN_IMAGE_URI, note.getImageUri().toString());
+        }
         return values;
     }
 
@@ -78,7 +86,6 @@ public class NotesDataSource extends Observable implements ObjectManager<Note> {
             notes.add(note);
             cursor.moveToNext();
         }
-        // make sure to close the cursor
         cursor.close();
         return notes;
     }
@@ -88,6 +95,10 @@ public class NotesDataSource extends Observable implements ObjectManager<Note> {
         note.setId(cursor.getLong(0));
         note.setTitle(cursor.getString(1));
         note.setText(cursor.getString(2));
+        String imageStr = cursor.getString(3);
+        if (imageStr != null) {
+            note.setImageUri(Uri.parse(imageStr));
+        }
         return note;
     }
 

@@ -79,6 +79,7 @@ public class Note implements Parcelable {
         parcel.writeLong(id);
         parcel.writeString(title);
         parcel.writeString(text);
+        parcel.writeParcelable(imageUri, flags);
     }
 
     public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
@@ -97,6 +98,7 @@ public class Note implements Parcelable {
         id = parcel.readLong();
         title = parcel.readString();
         text = parcel.readString();
+        imageUri = parcel.readParcelable(Uri.class.getClassLoader());
     }
 
     @Override
