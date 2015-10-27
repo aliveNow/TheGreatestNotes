@@ -8,7 +8,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".NotesListActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,14 +18,17 @@
         </activity>
         <activity
             android:name=".EditNoteActivity"
-            android:label="@string/title_activity_edit_note" >
+            android:label="@string/title_activity_edit_note"
+            android:configChanges="orientation|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NotesListActivity" />
         </activity>
         <activity
             android:name=".ShowImageActivity"
-            android:label="@string/title_activity_show_image" >
+            android:label="@string/title_activity_show_image"
+            android:theme="@style/FullscreenTheme"
+            android:configChanges="orientation|screenSize">
         </activity>
     </application>
 

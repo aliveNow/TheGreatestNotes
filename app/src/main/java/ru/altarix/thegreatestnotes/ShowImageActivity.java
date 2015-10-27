@@ -1,12 +1,11 @@
 package ru.altarix.thegreatestnotes;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +13,11 @@ import android.widget.ImageView;
 
 import java.io.IOException;
 
-public class ShowImageActivity extends AppCompatActivity {
+public class ShowImageActivity extends Activity implements View.OnClickListener {
 
     public static final String PICTURE_URI_KEY = "picture_uri";
+
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,21 +27,22 @@ public class ShowImageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Uri uri = intent.getParcelableExtra(PICTURE_URI_KEY);
-        Bitmap bitmap = null;
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-            ImageView imageView = (ImageView) findViewById(R.id.imageView);
             imageView.setImageBitmap(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        imageView.setOnClickListener(this);
 
+        hideSystemBars();
+    }
+
+    protected void hideSystemBars() {
         getWindow().
                 getDecorView().
                 setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
-
-        android.support.v7.app.ActionBar bar = getSupportActionBar();
-        bar.hide();
     }
 
     @Override
@@ -56,5 +58,18 @@ public class ShowImageActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (bitmap != null) {
+            bitmap.recycle();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        hideSystemBars();
     }
 }

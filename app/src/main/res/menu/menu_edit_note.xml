@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ru.altarix.thegreatestnotes.EditNoteFragment">
+
     <item
         android:id="@+id/save_note"
         android:icon="@android:drawable/ic_menu_save"
@@ -14,11 +15,5 @@
         android:orderInCategory="100"
         app:showAsAction="never"
         android:title="@string/add_picture" />
-
-    <item
-        android:id="@+id/make_picture"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="@string/make_picture" />
 
 </menu>
