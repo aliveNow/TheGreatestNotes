@@ -20,27 +20,35 @@ import ru.altarix.thegreatestnotes.utils.ImageUtils;
  */
 public class ListViewNotesAdapter extends ArrayAdapter<Note> implements Observer {
 
+    private final LayoutInflater inflater;
     private ObjectManager<Note> dataSource;
+
 
     public ListViewNotesAdapter(Context context, int resource, int textViewResourceId, ObjectManager<Note> dataSource) {
         super(context, resource, textViewResourceId, dataSource.getAllObjects());
         this.dataSource = dataSource;
         dataSource.addObserver(this);
+        inflater = LayoutInflater.from(this.getContext());
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         Note note = getItem(position);
-
+        Holder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.listview_item, parent, false);
+            convertView = inflater.inflate(R.layout.listview_item, parent, false);
+            holder = new Holder();
+            holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
+            holder.textView = (TextView) convertView.findViewById(R.id.text_data);
+            convertView.setTag(holder);
+        }else {
+            holder = (Holder) convertView.getTag();
         }
 
-        TextView textView = (TextView) convertView.findViewById(R.id.text_data);
-        textView.setText(note.getTitle());
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
-        ImageUtils.showThumbnailImage(getContext(), imageView, note.getImageUri());
+        holder.textView.setText(note.getTitle());
+        ImageUtils.showThumbnailImage(getContext(), holder.imageView, note.getImageUri());
+        holder.imageView.setVisibility(note.getImageUri() == null ? View.GONE : View.VISIBLE);
 
         return convertView;
     }
@@ -71,4 +79,10 @@ public class ListViewNotesAdapter extends ArrayAdapter<Note> implements Observer
                 break;
         }
     }
+
+    class Holder {
+        TextView textView;
+        ImageView imageView;
+    }
+
 }

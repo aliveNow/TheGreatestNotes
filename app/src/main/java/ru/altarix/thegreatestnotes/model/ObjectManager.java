@@ -1,5 +1,7 @@
 package ru.altarix.thegreatestnotes.model;
 
+import android.database.Observable;
+
 import java.util.List;
 import java.util.Observer;
 

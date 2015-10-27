@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -96,7 +97,7 @@ public class NotesDataSource extends Observable implements ObjectManager<Note> {
         note.setTitle(cursor.getString(1));
         note.setText(cursor.getString(2));
         String imageStr = cursor.getString(3);
-        if (imageStr != null) {
+        if (!TextUtils.isEmpty(imageStr)) {
             note.setImageUri(Uri.parse(imageStr));
         }
         return note;
