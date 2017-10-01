@@ -1,9 +1,10 @@
 package ru.altarix.thegreatestnotes;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,42 +15,49 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.altarix.thegreatestnotes.model.Note;
-import ru.altarix.thegreatestnotes.model.NotesManager;
+import ru.altarix.thegreatestnotes.utils.Constants;
 import ru.altarix.thegreatestnotes.utils.ImageUtils;
+import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 
-public class ViewNoteFragment extends Fragment implements View.OnClickListener {
-    private static final String NOTE_PARAM = "note_param";
-    private static final String LAYOUT_RESOURCE_PARAM = "layout_resource_param";
+public class ViewNoteFragment extends Fragment
+        implements View.OnClickListener {
 
     protected Note note;
-    protected int layoutResource;
+    protected OnNoteActionSelectedListener mCallback;
     protected TextView titleView;
     protected TextView textView;
     protected ImageView imageView;
 
-    public static ViewNoteFragment newInstance(Note note, int layoutResource) {
+    public static ViewNoteFragment newInstance(Note note) {
         ViewNoteFragment fragment = new ViewNoteFragment();
-        fragment.setArguments(bundleFromArguments(note, layoutResource));
+        fragment.setArguments(bundleFromArguments(note));
         return fragment;
     }
 
-    protected static Bundle bundleFromArguments(Note note, int layoutResource) {
+    protected static Bundle bundleFromArguments(Note note) {
         Bundle args = new Bundle();
-        args.putParcelable(NOTE_PARAM, note);
-        args.putInt(LAYOUT_RESOURCE_PARAM, layoutResource);
+        args.putParcelable(Constants.Extras.NOTE, note);
         return args;
     }
 
-    public ViewNoteFragment() {
-        // Required empty public constructor
+    public ViewNoteFragment() {}
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (OnNoteActionSelectedListener) context;
+        }catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement " + OnNoteActionSelectedListener.class);
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            note = getArguments().getParcelable(NOTE_PARAM);
-            layoutResource = getArguments().getInt(LAYOUT_RESOURCE_PARAM);
+            note = getArguments().getParcelable(Constants.Extras.NOTE);
         }
         setHasOptionsMenu(true);
     }
@@ -57,16 +65,18 @@ public class ViewNoteFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View contentView = inflater.inflate(layoutResource, container, false);
-        titleView = (TextView) contentView.findViewById(R.id.editTitle);
-        textView = (TextView) contentView.findViewById(R.id.editText);
-        imageView = (ImageView) contentView.findViewById(R.id.imageView);
+        View contentView = inflater.inflate(R.layout.fragment_view_note, container, false);
         return contentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        View contentView = getView();
+        // FIXME: 02.10.17 интересно, где-то было написано про механизм binding, он во всех версиях будет работать?
+        titleView = (TextView) contentView.findViewById(R.id.editTitle);
+        textView = (TextView) contentView.findViewById(R.id.editText);
+        imageView = (ImageView) contentView.findViewById(R.id.imageView);
         prepareViews();
         imageView.setOnClickListener(this);
     }
@@ -74,7 +84,6 @@ public class ViewNoteFragment extends Fragment implements View.OnClickListener {
     protected void prepareViews() {
         titleView.setText(note.getTitle());
         textView.setText(note.getText());
-        getActivity().setTitle(R.string.title_activity_show_note); //fixme перенести в активити?
         prepareImageView();
     }
 
@@ -96,24 +105,26 @@ public class ViewNoteFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        getActivity().getMenuInflater().inflate(R.menu.menu_show_note, menu);
-        super.onPrepareOptionsMenu(menu);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        if (!onBeforeCreateOptionsMenu(menu, inflater)) {
+            inflater.inflate(R.menu.menu_view_note, menu);
+        }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_show_note, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    protected boolean onBeforeCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            case R.id.edit_note :
+                mCallback.noteActionWasSelected(0, note, Constants.Action.EDIT);
+                return true;
             case R.id.delete_note :
-                NotesManager.getNotesManager().removeObject(note);
-                getActivity().finish();
+                mCallback.noteActionWasSelected(0, note, Constants.Action.DELETE);
                 return true;
         }
 

@@ -16,4 +16,11 @@
         app:showAsAction="never"
         android:title="@string/add_picture" />
 
+    <item
+        android:id="@+id/delete_note"
+        android:title="@string/delete_note"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        />
+
 </menu>

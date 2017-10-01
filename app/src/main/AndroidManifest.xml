@@ -17,21 +17,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditNoteActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_edit_note">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
             android:name=".ShowImageActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_show_image"
-            android:theme="@style/FullscreenTheme">
-
-        </activity>
-
+            android:theme="@style/FullscreenTheme"></activity>
+        <activity android:name=".NoteActivity"></activity>
     </application>
 
 </manifest>

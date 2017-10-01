@@ -18,9 +18,11 @@ public class Constants {
     }
 
     public enum Action {
+        NONE,
         CREATE,
         VIEW,
         EDIT,
+        SAVE,
         DELETE;
     }
 }

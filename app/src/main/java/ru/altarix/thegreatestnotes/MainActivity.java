@@ -11,12 +11,13 @@ import ru.altarix.thegreatestnotes.model.Note;
 import ru.altarix.thegreatestnotes.model.NotesManager;
 import ru.altarix.thegreatestnotes.model.ObjectManager;
 import ru.altarix.thegreatestnotes.utils.Constants;
+import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 
 /**
  * Created by samsmariya on 01.10.17.
  */
 public class MainActivity extends AppCompatActivity
-        implements NotesListFragment.OnNoteSelectedListener {
+        implements OnNoteActionSelectedListener {
 
 
     private ObjectManager<Note> notesManager;
@@ -35,14 +36,14 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startNoteActivity(notesManager.createObject(), Constants.Action.EDIT);
+                startNoteActivity(null, Constants.Action.CREATE);
             }
         });
     }
 
 
     @Override
-    public void noteWasSelectedWithAction(int position, Note note, Constants.Action action) {
+    public void noteActionWasSelected(int position, Note note, Constants.Action action) {
         switch (action) {
             case VIEW:
             case EDIT:
@@ -52,14 +53,13 @@ public class MainActivity extends AppCompatActivity
                 notesManager.removeObject(note);
                 break;
             default:
+                // FIXME: 02.10.17 добавить вывод "что-то пошло не так" в лог
                 break;
         }
     }
 
-    // Open Note Activity
     private void startNoteActivity(Note note, Constants.Action action){
-        // FIXME: 01.10.17 нужно разделить на две разные Activity - View и Edit. Или одну с двумя фрагментами?
-        Intent intent = new Intent(this, EditNoteActivity.class);
+        Intent intent = new Intent(this, NoteActivity.class);
         intent.putExtra(Constants.Extras.NOTE, note);
         intent.putExtra(Constants.Extras.ACTION, action);
         startActivity(intent);
