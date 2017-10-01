@@ -8,13 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.altarix.thegreatestnotes.model.Note;
+import ru.altarix.thegreatestnotes.utils.Constants;
 
 public class EditNoteActivity extends AppCompatActivity {
 
-    public static final String EDITABLE_KEY = "editable";
-
     private Note note;
     boolean editable = false;
+    Constants.Action action = Constants.Action.VIEW;
     boolean wasShowActivity = false;
 
     @Override
@@ -23,8 +23,9 @@ public class EditNoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_note);
 
         Intent intent = getIntent();
-        note = (Note) intent.getParcelableExtra(Note.class.getCanonicalName());
-        editable = intent.getBooleanExtra(EDITABLE_KEY, false);
+        note = intent.getParcelableExtra(Constants.Extras.NOTE);
+        action = (Constants.Action) intent.getSerializableExtra(Constants.Extras.ACTION);
+        editable = (action == Constants.Action.EDIT);
         wasShowActivity = !editable;
         updateEditable(editable);
     }

@@ -1,12 +1,10 @@
 package ru.altarix.thegreatestnotes;
 
 import android.app.Fragment;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,26 +13,36 @@ import android.widget.ListView;
 
 import ru.altarix.thegreatestnotes.model.ListViewNotesAdapter;
 import ru.altarix.thegreatestnotes.model.Note;
-import ru.altarix.thegreatestnotes.model.ObjectManager;
+import ru.altarix.thegreatestnotes.model.NotesManager;
+import ru.altarix.thegreatestnotes.utils.Constants;
 
 public class NotesListFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private ListView mListView;
-    private ListViewNotesAdapter mAdapter;
-    private ObjectManager<Note> notesManager;
-
-    public static NotesListFragment newInstance(ObjectManager<Note> notesManager) {
-        NotesListFragment fragment = new NotesListFragment();
-        fragment.notesManager = notesManager;
-        return fragment;
+    public interface OnNoteSelectedListener {
+        public void noteWasSelectedWithAction(int position,
+                                              Note note,
+                                              Constants.Action action);
     }
 
-    public NotesListFragment() {}
+    private ListView mListView;
+    private ListViewNotesAdapter mAdapter;
+    private OnNoteSelectedListener mCallback;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (OnNoteSelectedListener) context;
+        }catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement NotesListListener");
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     @Override
@@ -48,8 +56,7 @@ public class NotesListFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mAdapter = new ListViewNotesAdapter(getActivity(), R.layout.listview_item, R.id.text_data, notesManager);
+        mAdapter = new ListViewNotesAdapter(getActivity(), R.layout.listview_item, R.id.text_data, NotesManager.getNotesManager());
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
         registerForContextMenu(mListView);
@@ -58,28 +65,10 @@ public class NotesListFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Note note = (Note) parent.getItemAtPosition(position);
-        startNoteActivity(note, false);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_notes_list, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add_note:
-                startNoteActivity(notesManager.createObject(), true);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        mCallback.noteWasSelectedWithAction(position, note, Constants.Action.VIEW);
     }
 
     // Menu for note items
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
@@ -94,30 +83,22 @@ public class NotesListFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        Note note = mAdapter.getItem(info.position);
+        int position = info.position;
+        Note note = mAdapter.getItem(position);
         switch (item.getItemId()) {
             case R.id.edit_note :
-                startNoteActivity(note, true);
+                mCallback.noteWasSelectedWithAction(position, note, Constants.Action.EDIT);
                 break;
             case R.id.remove_note :
-                notesManager.removeObject(note);
+                mCallback.noteWasSelectedWithAction(position, note, Constants.Action.DELETE);
                 break;
         }
         return true;
     }
 
-    // Open Note Activity
-
-    private void startNoteActivity(Note note, boolean editable){
-        Intent intent = new Intent(getActivity(), EditNoteActivity.class);
-        intent.putExtra(Note.class.getCanonicalName(), note);
-        intent.putExtra(EditNoteActivity.EDITABLE_KEY, editable);
-        startActivity(intent);
-    }
-
     @Override
     public void onDetach() {
+        mCallback = null;
         super.onDetach();
     }
-
 }
