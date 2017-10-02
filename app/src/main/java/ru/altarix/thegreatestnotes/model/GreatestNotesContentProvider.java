@@ -20,7 +20,6 @@ import ru.altarix.thegreatestnotes.model.NotesContract.Notes;
 public class GreatestNotesContentProvider extends ContentProvider {
 
     private DBHelper dbHelper;
-    ObjectManager<Note> stubCreator;
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     private static final int ONE_NOTE = 1;
     private static final int NOTES = 2;
@@ -33,8 +32,6 @@ public class GreatestNotesContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         dbHelper = new DBHelper(getContext());
-        // FIXME: 02.10.17 временно, конечно... пока всё поломано, пусть будет
-        stubCreator = ObjectManagerFactory.createNotesManager(dbHelper);
         return true;
     }
 

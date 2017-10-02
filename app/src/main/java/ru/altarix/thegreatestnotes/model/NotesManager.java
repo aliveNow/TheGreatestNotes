@@ -1,10 +1,8 @@
 package ru.altarix.thegreatestnotes.model;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,10 +18,8 @@ import ru.altarix.thegreatestnotes.model.NotesContract.Notes;
  * Created by samsmariya on 04.10.15.
  */
 public class NotesManager extends Observable implements ObjectManager<Note> {
-    
-    // Database fields
-    private SQLiteDatabase database;
-    private SQLiteOpenHelper dbHelper;
+
+    protected Context mContext;
     private String[] allColumns = {
             Notes._ID,
             Notes.COLUMN_TITLE,
@@ -31,54 +27,39 @@ public class NotesManager extends Observable implements ObjectManager<Note> {
             Notes.COLUMN_IMAGE_URI
     };
 
-    public NotesManager(SQLiteOpenHelper dbHelper) {
-        this.dbHelper = dbHelper;
-        open();
-        createStubNotes();
+    public NotesManager(Context context) {
+        mContext = context;
+        // TODO: 02.10.17 тут можно вставить проверку на тип сборки для интереса
+        //createStubNotes();
     }
 
-    public void open() throws SQLException {
-        // теперь это класс-заглушка, так что пока что и так сойдёт
-        database = dbHelper.getWritableDatabase();
-    }
-
-    void createStubNotes() {
-        List<Note> notes = getAllNotes();
-        if (notes.size() > 0) {
-            return;
-        }
-        for (String title : new String[] {
-                "просто",
-                "еще",
-                "одна",
-                "заметка"
-        }) {
-            Note note = createObject();
-            note.setTitle(title);
-            note.setText(title);
-            saveObject(note);
-        }
-    }
-
-    public void saveNote(Note note) {
+    public void insertNote(Note note) {
         ContentValues values = contentValuesFromObject(note);
-        long insertId = database.insert(Notes.TABLE_NAME, null, values);
-        note.setId(insertId);
-        notifyObservers(Action.INSERT, note);
+        Uri newNoteUri = mContext.getContentResolver().insert(Notes.CONTENT_URI, values);
+        if (newNoteUri != null) {
+            long insertId = Long.valueOf(newNoteUri.getLastPathSegment());
+            note.setId(insertId);
+            notifyObservers(Action.INSERT, note);
+        }
     }
 
     public void updateNote(Note note) {
         ContentValues values = contentValuesFromObject(note);
-        database.update(Notes.TABLE_NAME, values, Notes._ID + " = " + note.getId(), null);
-        notifyObservers(Action.UPDATE, note);
+        Uri noteUri = Notes.buildNoteUri(note.getId());
+        int updatedRows = mContext.getContentResolver().update(noteUri, values, null, null);
+        if (updatedRows == 1) {
+            notifyObservers(Action.UPDATE, note);
+        }
     }
 
     public void deleteNote(Note note) {
-        long id = note.getId();
-        Log.w(NotesManager.class.getName(), "Note deleted with id: " + id);
-        database.delete(Notes.TABLE_NAME, Notes._ID
-                + " = " + id, null);
-        notifyObservers(Action.DELETE, note);
+        Uri noteUri = Notes.buildNoteUri(note.getId());
+        int deletedRows = mContext.getContentResolver().delete(noteUri, null, null);
+        if (deletedRows == 1) {
+            // FIXME: 02.10.17 еще логи надо поправить
+            Log.w(NotesManager.class.getName(), "Note deleted: " + noteUri);
+            notifyObservers(Action.DELETE, note);
+        }
     }
 
     public List<Note> getAllNotes() {
@@ -96,8 +77,6 @@ public class NotesManager extends Observable implements ObjectManager<Note> {
         return notes;
     }
 
-
-
     // ObjectManager
 
     @Override
@@ -108,22 +87,24 @@ public class NotesManager extends Observable implements ObjectManager<Note> {
 
     @Override
     public Cursor getAllObjectsCursor() {
-        return database.query(Notes.TABLE_NAME,
-                allColumns, null, null, null, null, Notes.COLUMN_DATETIME + " DESC");
+        return mContext.getContentResolver().query(Notes.CONTENT_URI,
+                allColumns,
+                null, // selection
+                null, // selectionArgs
+                Notes.COLUMN_DATETIME + " DESC");
     }
 
     @Override
     public Note createObject() {
-        Note note = new Note(0, null, null);
-        return note;
+        return new Note();
     }
 
     @Override
     public void saveObject(Note note) {
-        if (note.getId() > 0) {
-            updateNote(note);
+        if (note.getId() == Note.EMPTY_ID) {
+            insertNote(note);
         }else {
-            saveNote(note);
+            updateNote(note);
         }
     }
 
@@ -167,5 +148,24 @@ public class NotesManager extends Observable implements ObjectManager<Note> {
         data.put(ObjectManager.ACTION_KEY, action);
         setChanged();
         notifyObservers(data);
+    }
+
+    // вспомогательный метод для тестирования
+    void createStubNotes() {
+        List<Note> notes = getAllNotes();
+        if (notes.size() > 0) {
+            return;
+        }
+        for (String title : new String[] {
+                "просто",
+                "еще",
+                "одна",
+                "заметка"
+        }) {
+            Note note = createObject();
+            note.setTitle(title);
+            note.setText(title);
+            saveObject(note);
+        }
     }
 }

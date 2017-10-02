@@ -27,13 +27,14 @@ public class RecyclerViewNotesAdapter extends RecyclerViewCursorAdapter<Recycler
 {
     private static final String TAG = RecyclerViewNotesAdapter.class.getSimpleName();
     private final Context mContext;
-    private ObjectManager<Note> notesManager = ObjectManagerFactory.getNotesManager();
+    private ObjectManager<Note> notesManager;
     private OnNoteActionSelectedListener mCallback;
 
     public RecyclerViewNotesAdapter(Context context, OnNoteActionSelectedListener callback) {
         super(null);
         mContext = context;
         mCallback = callback;
+        notesManager = ObjectManagerFactory.getNotesManager(mContext);
     }
 
     @Override

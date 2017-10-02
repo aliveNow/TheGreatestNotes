@@ -1,6 +1,6 @@
 package ru.altarix.thegreatestnotes.model;
 
-import android.database.sqlite.SQLiteOpenHelper;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
@@ -14,16 +14,11 @@ public class ObjectManagerFactory {
     private static ObjectManager<Note> notesManager;
     private static LruCache<String, Bitmap> thumbnailsImageCache;
 
-    public static ObjectManager<Note> createNotesManager(SQLiteOpenHelper dbHelper)
+    public static ObjectManager<Note> getNotesManager(Context context)
     {
         if (notesManager == null) {
-            notesManager = new NotesManager(dbHelper);
+            notesManager = new NotesManager(context.getApplicationContext());
         }
-        return notesManager;
-    }
-
-    public static ObjectManager<Note> getNotesManager()
-    {
         return notesManager;
     }
 

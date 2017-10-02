@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import ru.altarix.thegreatestnotes.model.Note;
+import ru.altarix.thegreatestnotes.model.ObjectManager;
 import ru.altarix.thegreatestnotes.model.ObjectManagerFactory;
 import ru.altarix.thegreatestnotes.utils.Constants;
 import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
@@ -18,12 +19,16 @@ import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 public class MainActivity extends AppCompatActivity
         implements OnNoteActionSelectedListener {
 
+    private ObjectManager<Note> notesManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        notesManager = ObjectManagerFactory.getNotesManager(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity
                 startNoteActivity(note, action);
                 break;
             case DELETE:
-                ObjectManagerFactory.getNotesManager().removeObject(note);
+                notesManager.removeObject(note);
                 break;
             default:
                 // FIXME: 02.10.17 добавить вывод "что-то пошло не так" в лог

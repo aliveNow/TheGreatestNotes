@@ -8,9 +8,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import ru.altarix.thegreatestnotes.model.Note;
+import ru.altarix.thegreatestnotes.model.ObjectManager;
 import ru.altarix.thegreatestnotes.model.ObjectManagerFactory;
 import ru.altarix.thegreatestnotes.utils.Constants;
 import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
+import ru.altarix.thegreatestnotes.utils.Constants.Extras;
 
 /**
  * Created by samsmariya on 02.10.17.
@@ -18,6 +20,7 @@ import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 public class NoteActivity extends AppCompatActivity
         implements OnNoteActionSelectedListener {
 
+    private ObjectManager<Note> notesManager;
     private Note note;
     Constants.Action action = Constants.Action.NONE;
 
@@ -26,17 +29,19 @@ public class NoteActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
+        notesManager = ObjectManagerFactory.getNotesManager(this);
+
         Intent intent = getIntent();
-        note = intent.getParcelableExtra(Constants.Extras.NOTE);
-        Constants.Action action = (Constants.Action) intent.getSerializableExtra(Constants.Extras.ACTION);
+        note = intent.getParcelableExtra(Extras.NOTE);
+        Constants.Action action = (Constants.Action) intent.getSerializableExtra(Extras.ACTION);
         changeActionForNote(note, action);
     }
 
-    private void changeActionForNote(Note note, Constants.Action action){
+    protected void changeActionForNote(Note note, Constants.Action action){
         Fragment fragment = null;
         switch (action) {
             case CREATE:
-                note = ObjectManagerFactory.getNotesManager().createObject();
+                note = notesManager.createObject();
                 fragment = EditNoteFragment.newInstance(note);
                 setTitle(R.string.title_activity_create_note);
                 break;
@@ -60,7 +65,7 @@ public class NoteActivity extends AppCompatActivity
         }
     }
 
-    private void applyActionForNote(Note note, Constants.Action action) {
+    protected void applyActionForNote(Note note, Constants.Action action) {
         int messageId = R.string.msg_null;
         switch (action) {
             case EDIT:
@@ -68,13 +73,13 @@ public class NoteActivity extends AppCompatActivity
                 changeActionForNote(note, action);
                 break;
             case SAVE:
-                ObjectManagerFactory.getNotesManager().saveObject(note);
+                notesManager.saveObject(note);
                 changeActionForNote(note, Constants.Action.VIEW);
                 messageId = R.string.msg_note_saved;
                 break;
             case DELETE:
                 // FIXME: 02.10.17 добавить диалог
-                ObjectManagerFactory.getNotesManager().removeObject(note);
+                notesManager.removeObject(note);
                 // FIXME: 02.10.17 вот этого сообщения ни-и-икто не увидит. Надо делать в MainActivity startForResult и прочая
                 messageId = R.string.msg_note_deleted;
                 finish();

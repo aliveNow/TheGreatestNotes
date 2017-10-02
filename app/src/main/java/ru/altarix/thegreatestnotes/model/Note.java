@@ -9,19 +9,20 @@ import android.os.Parcelable;
  */
 public class Note implements Parcelable {
 
-    private long id;
+    public static final int EMPTY_ID = -1;
+
+    private long id = EMPTY_ID;
     private String title;
     private String text;
     private Uri imageUri;
 
-    public Note() {
-    }
+    Note() {}
 
-    public Note(long id) {
+    Note(long id) {
         this.id = id;
     }
 
-    public Note(long id, String title, String text) {
+    Note(long id, String title, String text) {
         this.id = id;
         this.text = text;
         this.title = title;
@@ -31,7 +32,7 @@ public class Note implements Parcelable {
         return id;
     }
 
-    public void setId(long id) {
+    void setId(long id) {
         this.id = id;
     }
 
