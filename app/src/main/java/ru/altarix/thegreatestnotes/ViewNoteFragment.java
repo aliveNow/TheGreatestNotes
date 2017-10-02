@@ -121,10 +121,10 @@ public class ViewNoteFragment extends Fragment
 
         switch (item.getItemId()) {
             case R.id.edit_note :
-                mCallback.noteActionWasSelected(0, note, Constants.Action.EDIT);
+                mCallback.onNoteActionSelected(note, Constants.Action.EDIT);
                 return true;
             case R.id.delete_note :
-                mCallback.noteActionWasSelected(0, note, Constants.Action.DELETE);
+                mCallback.onNoteActionSelected(note, Constants.Action.DELETE);
                 return true;
         }
 

@@ -19,8 +19,7 @@ import ru.altarix.thegreatestnotes.utils.Constants;
 import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 
 public class NotesListFragment extends Fragment
-        implements //AdapterView.OnItemClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private RecyclerView mRecyclerView;
     private RecyclerViewNotesAdapter mAdapter;
@@ -49,10 +48,9 @@ public class NotesListFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new RecyclerViewNotesAdapter(getActivity());
+        mAdapter = new RecyclerViewNotesAdapter(getActivity(), mCallback);
         mRecyclerView.setAdapter(mAdapter);
         getLoaderManager().initLoader(Constants.Loaders.NOTES, null, this);
-       // registerForContextMenu(mListView);
     }
 
   /*  @Override
@@ -117,6 +115,4 @@ public class NotesListFragment extends Fragment
         mCallback = null;
         super.onDetach();
     }
-
-
 }

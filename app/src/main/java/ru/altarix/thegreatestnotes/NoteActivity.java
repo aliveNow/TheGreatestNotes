@@ -89,7 +89,7 @@ public class NoteActivity extends AppCompatActivity
     }
 
     @Override
-    public void noteActionWasSelected(int position, Note note, Constants.Action action) {
+    public void onNoteActionSelected(Note note, Constants.Action action) {
         applyActionForNote(note, action);
     }
 }

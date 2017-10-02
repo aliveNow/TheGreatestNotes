@@ -7,7 +7,6 @@ import ru.altarix.thegreatestnotes.model.Note;
  */
 
 public interface OnNoteActionSelectedListener {
-    void noteActionWasSelected(int position,
-                               Note note,
-                               Constants.Action action);
+    void onNoteActionSelected(Note note,
+                              Constants.Action action);
 }

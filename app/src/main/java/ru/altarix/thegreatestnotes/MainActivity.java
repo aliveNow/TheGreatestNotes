@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void noteActionWasSelected(int position, Note note, Constants.Action action) {
+    public void onNoteActionSelected(Note note, Constants.Action action) {
         switch (action) {
             case VIEW:
             case EDIT:

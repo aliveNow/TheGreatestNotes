@@ -54,7 +54,7 @@ public class EditNoteFragment extends ViewNoteFragment {
             case R.id.save_note :
                 note.setTitle(titleView.getText().toString());
                 note.setText(textView.getText().toString());
-                mCallback.noteActionWasSelected(0, note, Constants.Action.SAVE);
+                mCallback.onNoteActionSelected(note, Constants.Action.SAVE);
                 break;
             case R.id.add_picture :
                 choosePictureFromGallery();
