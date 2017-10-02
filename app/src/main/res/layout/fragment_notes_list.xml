@@ -7,10 +7,10 @@
     tools:context="ru.altarix.thegreatestnotes.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <ListView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/listview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:padding="@dimen/padding_normal"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -22,6 +22,11 @@
             android:label="@string/title_activity_show_image"
             android:theme="@style/FullscreenTheme"></activity>
         <activity android:name=".NoteActivity"></activity>
+
+        <provider android:name="ru.altarix.thegreatestnotes.model.GreatestNotesContentProvider"
+            android:authorities="ru.altarix.thegreatestnotes.model"
+            android:exported="false">
+        </provider>
     </application>
 
 </manifest>

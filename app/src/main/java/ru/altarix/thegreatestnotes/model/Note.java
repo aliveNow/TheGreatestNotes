@@ -73,7 +73,6 @@ public class Note implements Parcelable {
 
     // Parcelable
 
-    // упаковываем объект в Parcel
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeLong(id);
@@ -83,7 +82,6 @@ public class Note implements Parcelable {
     }
 
     public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
-        // распаковываем объект из Parcel
         public Note createFromParcel(Parcel in) {
             return new Note(in);
         }

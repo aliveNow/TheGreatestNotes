@@ -1,6 +1,7 @@
 package ru.altarix.thegreatestnotes.model;
 
-import android.database.Observable;
+import android.content.ContentValues;
+import android.database.Cursor;
 
 import java.util.List;
 import java.util.Observer;
@@ -10,16 +11,20 @@ import java.util.Observer;
  */
 public interface ObjectManager<T> {
 
-    public static final String OBJECT_KEY = "object";
-    public static final String ACTION_KEY = "action";
+    String OBJECT_KEY = "object";
+    String ACTION_KEY = "action";
 
-    public enum Action { INSERT, UPDATE, DELETE }
+    enum Action { INSERT, UPDATE, DELETE }
 
-    public void addObserver(Observer observer);
-    public void deleteObserver(Observer observer);
+    void addObserver(Observer observer);
+    void deleteObserver(Observer observer);
 
-    public List<T> getAllObjects();
-    public T createObject();
-    public void saveObject(T obj);
-    public void removeObject(T obj);
+    List<T> getAllObjects();
+    Cursor getAllObjectsCursor();
+    T createObject();
+    void saveObject(T obj);
+    void removeObject(T obj);
+
+    T cursorToObject(Cursor cursor);
+    ContentValues contentValuesFromObject(T obj);
 }

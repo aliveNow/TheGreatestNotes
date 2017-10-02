@@ -27,4 +27,6 @@
     <string name="msg_note_saved">Заметка сохранена</string>
     <string name="msg_note_deleted">Заметка удалена</string>
     <string name="msg_null">Нужно как NULL</string>
+    <string name="error_invalid_uri">Invalid uri: $1%s</string>
+    <string name="error_db_operation_failed">Database operation failed: $1%s</string>
 </resources>

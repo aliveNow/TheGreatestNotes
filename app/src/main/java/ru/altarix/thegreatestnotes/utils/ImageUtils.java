@@ -9,7 +9,7 @@ import android.provider.MediaStore;
 import android.util.LruCache;
 import android.widget.ImageView;
 
-import ru.altarix.thegreatestnotes.model.NotesManager;
+import ru.altarix.thegreatestnotes.model.ObjectManagerFactory;
 
 /**
  * Created by samsmariya on 24.10.15.
@@ -46,7 +46,7 @@ public class ImageUtils {
         Bitmap bitmap = null;
         if (uri != null) {
             String key = uri.toString();
-            LruCache<String, Bitmap> cache = NotesManager.getThumbnailsImageCache();
+            LruCache<String, Bitmap> cache = ObjectManagerFactory.getThumbnailsImageCache();
             bitmap = cache.get(key);
             if (bitmap == null) {
                 bitmap = ImageUtils.getThumbnailBitmap(context, uri);

@@ -17,6 +17,10 @@ public class Constants {
         public static final String ACTION = createExtra("ACTION");
     }
 
+    public static class Loaders {
+        public static final int NOTES = 30;
+    }
+
     public enum Action {
         NONE,
         CREATE,

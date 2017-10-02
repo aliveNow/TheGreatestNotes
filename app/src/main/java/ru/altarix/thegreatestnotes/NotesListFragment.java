@@ -1,27 +1,29 @@
 package ru.altarix.thegreatestnotes;
 
-import android.app.Fragment;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.view.ContextMenu;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import ru.altarix.thegreatestnotes.model.ListViewNotesAdapter;
-import ru.altarix.thegreatestnotes.model.Note;
-import ru.altarix.thegreatestnotes.model.NotesManager;
+import ru.altarix.thegreatestnotes.adapters.RecyclerViewNotesAdapter;
+import ru.altarix.thegreatestnotes.model.NotesContract.Notes;
 import ru.altarix.thegreatestnotes.utils.Constants;
 import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 
 public class NotesListFragment extends Fragment
-        implements AdapterView.OnItemClickListener {
+        implements //AdapterView.OnItemClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
-    private ListView mListView;
-    private ListViewNotesAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private RecyclerViewNotesAdapter mAdapter;
     private OnNoteActionSelectedListener mCallback;
 
     @Override
@@ -36,29 +38,24 @@ public class NotesListFragment extends Fragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //setHasOptionsMenu(true);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_notes_list, container, false);
-        mListView = (ListView) contentView.findViewById(R.id.listview);
+        mRecyclerView = (RecyclerView) contentView.findViewById(R.id.recycler_view);
         return contentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAdapter = new ListViewNotesAdapter(getActivity(), R.layout.listview_item, R.id.text_data, NotesManager.getNotesManager());
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-        registerForContextMenu(mListView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new RecyclerViewNotesAdapter(getActivity());
+        mRecyclerView.setAdapter(mAdapter);
+        getLoaderManager().initLoader(Constants.Loaders.NOTES, null, this);
+       // registerForContextMenu(mListView);
     }
 
-    @Override
+  /*  @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Note note = (Note) parent.getItemAtPosition(position);
         mCallback.noteActionWasSelected(position, note, Constants.Action.VIEW);
@@ -90,6 +87,29 @@ public class NotesListFragment extends Fragment
                 break;
         }
         return true;
+    } */
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (id == Constants.Loaders.NOTES) {
+                return new CursorLoader(getActivity(),
+                        Notes.CONTENT_URI,
+                        null, // все столбцы
+                        null, // все записи
+                        null, // без аргументов
+                        Notes.COLUMN_DATETIME + " DESC"); // сортировка
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
     }
 
     @Override
@@ -97,4 +117,6 @@ public class NotesListFragment extends Fragment
         mCallback = null;
         super.onDetach();
     }
+
+
 }

@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import ru.altarix.thegreatestnotes.model.Note;
-import ru.altarix.thegreatestnotes.model.NotesManager;
+import ru.altarix.thegreatestnotes.model.ObjectManagerFactory;
 import ru.altarix.thegreatestnotes.utils.Constants;
 import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 
@@ -36,7 +36,7 @@ public class NoteActivity extends AppCompatActivity
         Fragment fragment = null;
         switch (action) {
             case CREATE:
-                note = NotesManager.getNotesManager().createObject();
+                note = ObjectManagerFactory.getNotesManager().createObject();
                 fragment = EditNoteFragment.newInstance(note);
                 setTitle(R.string.title_activity_create_note);
                 break;
@@ -68,13 +68,13 @@ public class NoteActivity extends AppCompatActivity
                 changeActionForNote(note, action);
                 break;
             case SAVE:
-                NotesManager.getNotesManager().saveObject(note);
+                ObjectManagerFactory.getNotesManager().saveObject(note);
                 changeActionForNote(note, Constants.Action.VIEW);
                 messageId = R.string.msg_note_saved;
                 break;
             case DELETE:
                 // FIXME: 02.10.17 добавить диалог
-                NotesManager.getNotesManager().removeObject(note);
+                ObjectManagerFactory.getNotesManager().removeObject(note);
                 // FIXME: 02.10.17 вот этого сообщения ни-и-икто не увидит. Надо делать в MainActivity startForResult и прочая
                 messageId = R.string.msg_note_deleted;
                 finish();
