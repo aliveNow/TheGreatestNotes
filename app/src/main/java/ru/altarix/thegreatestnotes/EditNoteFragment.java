@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -68,6 +70,17 @@ public class EditNoteFragment extends ViewNoteFragment {
         layoutEditNote.setHint(getString(action == Action.CREATE
                 ? R.string.hint_enter_note
                 : R.string.hint_edit_note));
+
+        textNote.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    saveNote();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -90,9 +103,7 @@ public class EditNoteFragment extends ViewNoteFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_save_note:
-                note.setTitle(textTitle.getText().toString());
-                note.setText(textNote.getText().toString());
-                mCallback.onNoteActionSelected(note, Constants.Action.SAVE);
+                saveNote();
                 break;
             case R.id.menu_add_picture:
                 choosePictureFromGallery();
@@ -100,6 +111,12 @@ public class EditNoteFragment extends ViewNoteFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void saveNote() {
+        note.setTitle(textTitle.getText().toString());
+        note.setText(textNote.getText().toString());
+        mCallback.onNoteActionSelected(note, Constants.Action.SAVE);
     }
 
     protected void choosePictureFromGallery() {
