@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -27,7 +25,7 @@ public class ShowImageActivity extends Activity implements View.OnClickListener 
 
         Intent intent = getIntent();
         Uri uri = intent.getParcelableExtra(PICTURE_URI_KEY);
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        ImageView imageView = (ImageView) findViewById(R.id.image_thumbnail);
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             imageView.setImageBitmap(bitmap);
@@ -43,21 +41,6 @@ public class ShowImageActivity extends Activity implements View.OnClickListener 
         getWindow().
                 getDecorView().
                 setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_show_image, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

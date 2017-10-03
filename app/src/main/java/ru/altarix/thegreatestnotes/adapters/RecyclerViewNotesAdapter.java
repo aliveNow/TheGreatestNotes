@@ -96,7 +96,7 @@ public class RecyclerViewNotesAdapter extends RecyclerViewCursorAdapter<Recycler
                 return false;
             }
             switch (item.getItemId()) {
-                case R.id.edit_note :
+                case R.id.menu_edit_note :
                     mCallback.onNoteActionSelected(note, Action.EDIT);
                     break;
                 case R.id.remove_note :

@@ -35,6 +35,7 @@ public class NotesManager extends Observable implements ObjectManager<Note> {
 
     public void insertNote(Note note) {
         ContentValues values = contentValuesFromObject(note);
+        // TODO: 03.10.17 сделать в AsyncQueryHandler?
         Uri newNoteUri = mContext.getContentResolver().insert(Notes.CONTENT_URI, values);
         if (newNoteUri != null) {
             long insertId = Long.valueOf(newNoteUri.getLastPathSegment());

@@ -42,15 +42,15 @@ public class NoteActivity extends AppCompatActivity
         switch (action) {
             case CREATE:
                 note = notesManager.createObject();
-                fragment = EditNoteFragment.newInstance(note);
+                fragment = EditNoteFragment.newInstance(note, action);
                 setTitle(R.string.title_activity_create_note);
                 break;
             case EDIT:
-                fragment = EditNoteFragment.newInstance(note);
+                fragment = EditNoteFragment.newInstance(note, action);
                 setTitle(R.string.title_activity_edit_note);
                 break;
             case VIEW:
-                fragment = ViewNoteFragment.newInstance(note);
+                fragment = ViewNoteFragment.newInstance(note, action);
                 setTitle(R.string.title_activity_view_note);
                 break;
             default:

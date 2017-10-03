@@ -1,27 +1,20 @@
 <resources>
     <string name="app_name">Заметки</string>
 
-    <string name="action_settings">Settings</string>
     <string name="title_activity_create_note">Новая заметка</string>
     <string name="title_activity_edit_note">Редактирование заметки</string>
     <string name="title_activity_view_note">Просмотр заметки</string>
-    <string name="add_note">Добавить заметку</string>
-    <string name="save_note">Сохранить</string>
-    <string name="edit_note">Редактировать</string>
-    <string name="remove_note">Удалить</string>
-    <string name="delete_note">Удалить</string>
-    <string name="add_picture">Добавить изображение</string>
-    <string name="make_picture">Сфотографировать</string>
-    <string name="choose_picture">Выбрать изображение</string>
-
-    <string-array name="note_menu">
-        <item>text_string</item>
-        <item>text_string2</item>
-        <item>text_string3</item>
-    </string-array>
+    <string name="menu_save_note">Сохранить</string>
+    <string name="menu_edit_note">Редактировать</string>
+    <string name="menu_remove_note">Удалить</string>
+    <string name="menu_delete_note">Удалить</string>
+    <string name="menu_add_picture">Добавить изображение</string>
+    <string name="title_dialog_choose_picture">Выбрать изображение</string>
     <string name="title_activity_show_image">ShowImageActivity</string>
-    <string name="enter_note">Введите заметку</string>
-    <string name="enter_title">Введите заголовок</string>
+    <string name="hint_enter_note">Введите заметку</string>
+    <string name="hint_enter_title">Введите заголовок</string>
+    <string name="hint_edit_note">Отредактируйте заметку</string>
+    <string name="hint_edit_title">Отредактируйте заголовок</string>
     <string name="title_activity_main">Заметки</string>
     <string name="msg_such_action_not_exist">Такого действия нет</string>
     <string name="msg_note_saved">Заметка сохранена</string>

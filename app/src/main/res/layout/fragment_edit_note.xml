@@ -3,39 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ru.altarix.thegreatestnotes.EditNoteFragment">
+    android:padding="@dimen/padding_normal"
+    tools:context=".NoteActivity">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/editTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="0dp"
-            android:layout_weight="1"
-            android:textSize="@dimen/titleTextSize"
-            android:hint="@string/enter_title" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_edit_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <EditText
+                android:id="@+id/edit_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:hint="@string/hint_enter_title"
+                android:imeOptions="actionNext">
+                <requestFocus />
+            </EditText>
+        </android.support.design.widget.TextInputLayout>
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/image_thumbnail"
             android:layout_width="@dimen/size_image_thumbnail"
-            android:layout_height="@dimen/size_image_thumbnail" />
+            android:layout_height="@dimen/size_image_thumbnail"
+            android:visibility="gone"
+            />
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/editText"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_edit_note"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="0dp"
-        android:inputType="textMultiLine"
-        android:textSize="@dimen/normalTextSize"
-        android:gravity="top"
-        android:ems="10"
-        android:singleLine="false"
-        android:hint="@string/enter_note"/>
+        android:layout_height="match_parent">
+        <EditText
+            android:id="@+id/edit_note"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:hint="@string/hint_enter_note"
+            android:imeOptions="actionDone"/>
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

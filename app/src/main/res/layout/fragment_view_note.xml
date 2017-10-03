@@ -1,47 +1,43 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".NoteActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="ru.altarix.thegreatestnotes.ViewNoteFragment">
+        android:padding="@dimen/padding_normal"
+        android:divider="?android:listDivider"
+        android:showDividers="middle">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/padding_half_normal">
 
             <TextView
-                android:id="@+id/editTitle"
+                android:id="@+id/text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/titleTextSize" />
+                android:textAppearance="?android:textAppearanceLarge"/>
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/image_thumbnail"
                 android:layout_width="@dimen/size_image_thumbnail"
-                android:layout_height="@dimen/size_image_thumbnail" />
+                android:layout_height="@dimen/size_image_thumbnail"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/padding8"
-            android:layout_marginTop="@dimen/padding8"
-            android:background="@android:color/darker_gray" />
-
         <TextView
-            android:id="@+id/editText"
+            android:id="@+id/text_note"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/normalTextSize" />
+            android:paddingTop="@dimen/padding_half_normal"
+            android:textAppearance="?android:textAppearanceMedium" />
 
     </LinearLayout>
 </ScrollView>

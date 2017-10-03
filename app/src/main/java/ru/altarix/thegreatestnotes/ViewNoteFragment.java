@@ -18,25 +18,29 @@ import ru.altarix.thegreatestnotes.model.Note;
 import ru.altarix.thegreatestnotes.utils.Constants;
 import ru.altarix.thegreatestnotes.utils.ImageUtils;
 import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
+import ru.altarix.thegreatestnotes.utils.Constants.Extras;
 
 public class ViewNoteFragment extends Fragment
         implements View.OnClickListener {
 
     protected Note note;
+    protected Constants.Action action = Constants.Action.NONE;
     protected OnNoteActionSelectedListener mCallback;
-    protected TextView titleView;
-    protected TextView textView;
+
+    protected TextView textTitle;
+    protected TextView textNote;
     protected ImageView imageView;
 
-    public static ViewNoteFragment newInstance(Note note) {
+    public static ViewNoteFragment newInstance(Note note, Constants.Action action) {
         ViewNoteFragment fragment = new ViewNoteFragment();
-        fragment.setArguments(bundleFromArguments(note));
+        fragment.setArguments(bundleFromArguments(note, action));
         return fragment;
     }
 
-    protected static Bundle bundleFromArguments(Note note) {
+    protected static Bundle bundleFromArguments(Note note, Constants.Action action) {
         Bundle args = new Bundle();
-        args.putParcelable(Constants.Extras.NOTE, note);
+        args.putParcelable(Extras.NOTE, note);
+        args.putSerializable(Extras.ACTION, action);
         return args;
     }
 
@@ -57,7 +61,8 @@ public class ViewNoteFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            note = getArguments().getParcelable(Constants.Extras.NOTE);
+            note = getArguments().getParcelable(Extras.NOTE);
+            action = (Constants.Action) getArguments().getSerializable(Extras.ACTION);
         }
         setHasOptionsMenu(true);
     }
@@ -66,6 +71,8 @@ public class ViewNoteFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_view_note, container, false);
+        textTitle = (TextView) contentView.findViewById(R.id.text_title);
+        textNote = (TextView) contentView.findViewById(R.id.text_note);
         return contentView;
     }
 
@@ -74,16 +81,14 @@ public class ViewNoteFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         View contentView = getView();
         // FIXME: 02.10.17 интересно, где-то было написано про механизм binding, он во всех версиях будет работать?
-        titleView = (TextView) contentView.findViewById(R.id.editTitle);
-        textView = (TextView) contentView.findViewById(R.id.editText);
-        imageView = (ImageView) contentView.findViewById(R.id.imageView);
+        imageView = (ImageView) contentView.findViewById(R.id.image_thumbnail);
         prepareViews();
         imageView.setOnClickListener(this);
     }
 
     protected void prepareViews() {
-        titleView.setText(note.getTitle());
-        textView.setText(note.getText());
+        textTitle.setText(note.getTitle());
+        textNote.setText(note.getText());
         prepareImageView();
     }
 
@@ -120,10 +125,10 @@ public class ViewNoteFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.edit_note :
+            case R.id.menu_edit_note :
                 mCallback.onNoteActionSelected(note, Constants.Action.EDIT);
                 return true;
-            case R.id.delete_note :
+            case R.id.menu_delete_note:
                 mCallback.onNoteActionSelected(note, Constants.Action.DELETE);
                 return true;
         }

@@ -4,9 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="padding_normal">16dp</dimen>
     <dimen name="size_image_thumbnail">60dp</dimen>
-    <dimen name="padding8">8dp</dimen>
-    <dimen name="titleTextSize">16sp</dimen>
-    <dimen name="normalTextSize">16sp</dimen>
+    <dimen name="padding_half_normal">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="corner_radius_card">5dp</dimen>
 </resources>
