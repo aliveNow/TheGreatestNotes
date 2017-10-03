@@ -18,8 +18,8 @@
     <string name="title_activity_main">Заметки</string>
     <string name="msg_such_action_not_exist">Такого действия нет</string>
     <string name="msg_note_saved">Заметка сохранена</string>
-    <string name="msg_note_deleted">Заметка удалена</string>
-    <string name="msg_null">Нужно как NULL</string>
+    <string name="msg_note_deleted">Заметка \"%s\" удалена</string>
+    <string name="msg_null">NULL</string>
     <string name="error_invalid_uri">Invalid uri: %s</string>
     <string name="error_db_operation_failed">Database operation failed: %s</string>
 </resources>

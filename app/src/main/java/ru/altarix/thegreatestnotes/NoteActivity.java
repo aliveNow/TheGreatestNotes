@@ -90,8 +90,6 @@ public class NoteActivity extends AppCompatActivity
             case DELETE:
                 // FIXME: 02.10.17 добавить диалог
                 notesManager.removeObject(note);
-                // FIXME: 02.10.17 вот этого сообщения ни-и-икто не увидит. Надо делать в MainActivity startForResult и прочая
-                messageId = R.string.msg_note_deleted;
                 finish();
                 break;
             default:

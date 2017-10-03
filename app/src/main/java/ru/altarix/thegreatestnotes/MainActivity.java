@@ -3,14 +3,20 @@ package ru.altarix.thegreatestnotes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 import ru.altarix.thegreatestnotes.model.Note;
 import ru.altarix.thegreatestnotes.model.ObjectManager;
 import ru.altarix.thegreatestnotes.model.ObjectManagerFactory;
 import ru.altarix.thegreatestnotes.utils.Constants;
+import ru.altarix.thegreatestnotes.utils.Constants.Extras;
 import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 
 /**
@@ -39,6 +45,17 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        notesManager.addObserver(notesObserver);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        notesManager.deleteObserver(notesObserver);
+    }
 
     @Override
     public void onNoteActionSelected(Note note, Constants.Action action) {
@@ -58,8 +75,23 @@ public class MainActivity extends AppCompatActivity
 
     private void startNoteActivity(Note note, Constants.Action action){
         Intent intent = new Intent(this, NoteActivity.class);
-        intent.putExtra(Constants.Extras.NOTE, note);
-        intent.putExtra(Constants.Extras.ACTION, action);
+        intent.putExtra(Extras.NOTE, note);
+        intent.putExtra(Extras.ACTION, action);
         startActivity(intent);
     }
+
+    // FIXME: 03.10.17 временное решение
+    private Observer notesObserver = new Observer() {
+        @Override
+        public void update(Observable o, Object arg) {
+            Map map = (Map)arg;
+            Note note = (Note) map.get(ObjectManager.OBJECT_KEY);
+            ObjectManager.Action action = (ObjectManager.Action) map.get(ObjectManager.ACTION_KEY);
+            if (action == ObjectManager.Action.DELETE) {
+                Snackbar.make(findViewById(R.id.coordinator_layout),
+                        getString(R.string.msg_note_deleted, note.getTitle()),
+                        Snackbar.LENGTH_LONG).show();
+            }
+        }
+    };
 }
