@@ -49,8 +49,6 @@ public class RecyclerViewNotesAdapter extends RecyclerViewCursorAdapter<Recycler
         Note note = notesManager.cursorToObject(cursor);
         holder.textTitle.setText(note.getTitle());
         holder.note = note;
-       // ImageUtils.showThumbnailImage(getContext(), holder.imageView, note.getImageUri());
-       // holder.imageThumbnail.setVisibility(note.getImageUri() == null ? View.GONE : View.VISIBLE);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder

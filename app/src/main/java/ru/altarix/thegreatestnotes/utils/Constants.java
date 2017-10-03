@@ -27,6 +27,6 @@ public class Constants {
         VIEW,
         EDIT,
         SAVE,
-        DELETE;
+        DELETE
     }
 }

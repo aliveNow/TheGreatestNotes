@@ -56,13 +56,6 @@ public class Note implements Parcelable {
 
     public void setImageUri(Uri imageUri) { this.imageUri = imageUri; }
 
-    public void updateValues(Note note)
-    {
-        id = note.id;
-        title = note.title;
-        text = note.text;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o instanceof Note) {

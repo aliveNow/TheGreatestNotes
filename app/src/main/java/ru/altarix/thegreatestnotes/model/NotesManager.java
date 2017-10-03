@@ -64,7 +64,7 @@ public class NotesManager extends Observable implements ObjectManager<Note> {
     }
 
     public List<Note> getAllNotes() {
-        List<Note> notes = new ArrayList<Note>();
+        List<Note> notes = new ArrayList<>();
 
         Cursor cursor = getAllObjectsCursor();
 
@@ -144,7 +144,7 @@ public class NotesManager extends Observable implements ObjectManager<Note> {
     // Observable
 
     private void notifyObservers(final ObjectManager.Action action, final Note note) {
-        HashMap<String, Object> data = new HashMap<String, Object>();
+        HashMap<String, Object> data = new HashMap<>();
         data.put(ObjectManager.OBJECT_KEY, note);
         data.put(ObjectManager.ACTION_KEY, action);
         setChanged();

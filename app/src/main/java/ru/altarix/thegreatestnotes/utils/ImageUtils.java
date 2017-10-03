@@ -3,18 +3,28 @@ package ru.altarix.thegreatestnotes.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.LruCache;
 import android.widget.ImageView;
 
-import ru.altarix.thegreatestnotes.model.ObjectManagerFactory;
-
 /**
  * Created by samsmariya on 24.10.15.
  */
+// FIXME: 03.10.17 посмотреть что это вообще такое
 public class ImageUtils {
+
+    private static LruCache<String, Bitmap> thumbnailsImageCache;
+
+    public static LruCache<String, Bitmap> getThumbnailsImageCache() {
+        if (thumbnailsImageCache == null) {
+            Runtime rt = Runtime.getRuntime();
+            long maxMemory = rt.maxMemory() / 1024;
+            int cacheSize = (int) (maxMemory / 8);
+            thumbnailsImageCache = new ImageCache(cacheSize);
+        }
+        return thumbnailsImageCache;
+    }
 
     public static Uri getThumbnailPath(Context context, Uri uri) {
         String result = null;
@@ -38,7 +48,7 @@ public class ImageUtils {
                 context.getContentResolver(),
                 imageId,
                 MediaStore.Images.Thumbnails.MICRO_KIND,
-                (BitmapFactory.Options) null);
+                null);
         return bitmap;
     }
 
@@ -46,7 +56,7 @@ public class ImageUtils {
         Bitmap bitmap = null;
         if (uri != null) {
             String key = uri.toString();
-            LruCache<String, Bitmap> cache = ObjectManagerFactory.getThumbnailsImageCache();
+            LruCache<String, Bitmap> cache = getThumbnailsImageCache();
             bitmap = cache.get(key);
             if (bitmap == null) {
                 bitmap = ImageUtils.getThumbnailBitmap(context, uri);

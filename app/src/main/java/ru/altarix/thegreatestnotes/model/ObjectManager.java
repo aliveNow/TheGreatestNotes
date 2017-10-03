@@ -8,6 +8,7 @@ import java.util.Observer;
 
 /**
  * Created by samsmariya on 22.10.15.
+ *
  */
 public interface ObjectManager<T> {
 

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import java.io.IOException;
 
+// // FIXME: 03.10.17 отключила функционал, надо посмотреть, что за мысль вообще изначально была
 public class ShowImageActivity extends Activity implements View.OnClickListener {
 
     public static final String PICTURE_URI_KEY = "picture_uri";

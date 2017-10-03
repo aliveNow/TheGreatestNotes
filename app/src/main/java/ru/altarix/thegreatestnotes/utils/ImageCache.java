@@ -8,6 +8,7 @@ import android.util.LruCache;
  */
 // http://developer.android.com/intl/ru/training/displaying-bitmaps/cache-bitmap.html
 
+// FIXME: 03.10.17 посмотреть что это вообще такое
 public class ImageCache extends LruCache<String, Bitmap> {
 
     public ImageCache(int maxSize) {

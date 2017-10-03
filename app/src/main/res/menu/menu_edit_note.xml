@@ -14,6 +14,7 @@
         android:id="@+id/menu_add_picture"
         android:orderInCategory="100"
         app:showAsAction="never"
+        android:visible="false"
         android:title="@string/menu_add_picture" />
 
 
