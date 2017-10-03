@@ -1,6 +1,5 @@
 package ru.altarix.thegreatestnotes;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -11,8 +10,8 @@ import ru.altarix.thegreatestnotes.model.Note;
 import ru.altarix.thegreatestnotes.model.ObjectManager;
 import ru.altarix.thegreatestnotes.model.ObjectManagerFactory;
 import ru.altarix.thegreatestnotes.utils.Constants;
-import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 import ru.altarix.thegreatestnotes.utils.Constants.Extras;
+import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 
 /**
  * Created by samsmariya on 02.10.17.
@@ -31,10 +30,21 @@ public class NoteActivity extends AppCompatActivity
 
         notesManager = ObjectManagerFactory.getNotesManager(this);
 
-        Intent intent = getIntent();
-        note = intent.getParcelableExtra(Extras.NOTE);
-        Constants.Action action = (Constants.Action) intent.getSerializableExtra(Extras.ACTION);
-        changeActionForNote(note, action);
+        Bundle bundle = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();
+        note = bundle.getParcelable(Extras.NOTE);
+        Constants.Action newAction = (Constants.Action) bundle.getSerializable(Extras.ACTION);
+        if (savedInstanceState == null) {
+            changeActionForNote(note, newAction);
+        }else {
+            action = newAction;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(Extras.ACTION, action);
+        outState.putParcelable(Extras.NOTE, note);
     }
 
     protected void changeActionForNote(Note note, Constants.Action action){
