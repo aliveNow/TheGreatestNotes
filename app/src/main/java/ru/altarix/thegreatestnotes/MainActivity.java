@@ -25,7 +25,7 @@ import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 public class MainActivity extends AppCompatActivity
         implements OnNoteActionSelectedListener {
 
-    private ObjectManager<Note> notesManager;
+    private ObjectManager<Note> mNotesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +34,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        notesManager = ObjectManagerFactory.getNotesManager(this);
+        mNotesManager = ObjectManagerFactory.getNotesManager(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startNoteActivity(null, Constants.Action.CREATE);
+                startNoteActivity(mNotesManager.createObject(), Constants.Action.CREATE);
             }
         });
     }
@@ -48,13 +48,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        notesManager.addObserver(notesObserver);
+        mNotesManager.addObserver(notesObserver);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        notesManager.deleteObserver(notesObserver);
+        mNotesManager.deleteObserver(notesObserver);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
                 startNoteActivity(note, action);
                 break;
             case DELETE:
-                notesManager.removeObject(note);
+                mNotesManager.removeObject(note);
                 break;
             default:
                 // FIXME: 02.10.17 добавить вывод "что-то пошло не так" в лог

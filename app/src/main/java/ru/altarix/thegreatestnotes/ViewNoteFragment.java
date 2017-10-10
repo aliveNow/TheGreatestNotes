@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,19 +20,22 @@ import ru.altarix.thegreatestnotes.utils.Constants;
 import ru.altarix.thegreatestnotes.utils.ImageUtils;
 import ru.altarix.thegreatestnotes.utils.OnNoteActionSelectedListener;
 import ru.altarix.thegreatestnotes.utils.Constants.Extras;
+import ru.altarix.thegreatestnotes.utils.Utils;
 
 public class ViewNoteFragment extends Fragment
         implements View.OnClickListener {
 
-    protected Note note;
-    protected Constants.Action action = Constants.Action.NONE;
+    private static final String TAG = ViewNoteFragment.class.getSimpleName();
+
+    protected Note mNote;
+    protected Constants.Action mAction = Constants.Action.NONE;
     protected OnNoteActionSelectedListener mCallback;
 
     protected TextView textTitle;
     protected TextView textNote;
     protected ImageView imageView;
 
-    public static ViewNoteFragment newInstance(Note note, Constants.Action action) {
+    public static ViewNoteFragment newInstance(@NonNull Note note, @NonNull Constants.Action action) {
         ViewNoteFragment fragment = new ViewNoteFragment();
         fragment.setArguments(bundleFromArguments(note, action));
         return fragment;
@@ -45,6 +49,10 @@ public class ViewNoteFragment extends Fragment
     }
 
     public ViewNoteFragment() {}
+
+    public Constants.Action getCurrentAction() {
+        return mAction;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -60,9 +68,15 @@ public class ViewNoteFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            note = getArguments().getParcelable(Extras.NOTE);
-            action = (Constants.Action) getArguments().getSerializable(Extras.ACTION);
+        if (savedInstanceState == null) {
+            if (getArguments() != null) {
+                mNote = getArguments().getParcelable(Extras.NOTE);
+                mAction = (Constants.Action) getArguments().getSerializable(Extras.ACTION);
+            }
+            Utils.requireNonNull(mNote, TAG + ": NOTE extra can't be null");
+        }else {
+            mNote = savedInstanceState.getParcelable(Extras.NOTE);
+            mAction = (Constants.Action) savedInstanceState.getSerializable(Extras.ACTION);
         }
         setHasOptionsMenu(true);
     }
@@ -86,24 +100,37 @@ public class ViewNoteFragment extends Fragment
         imageView.setOnClickListener(this);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Extras.NOTE, mNote);
+        outState.putSerializable(Extras.ACTION, mAction);
+    }
+
+    public void refreshState(@NonNull Note note, @NonNull Constants.Action action) {
+        mNote = note;
+        mAction = action;
+        prepareViews();
+    }
+
     protected void prepareViews() {
-        textTitle.setText(note.getTitle());
-        textNote.setText(note.getText());
+        textTitle.setText(mNote.getTitle());
+        textNote.setText(mNote.getText());
         prepareImageView();
     }
 
     protected void prepareImageView() {
-        showImage(note.getImageUri());
-        imageView.setVisibility(note.getImageUri() == null ? View.GONE : View.VISIBLE);
+        showImage(mNote.getImageUri());
+        imageView.setVisibility(mNote.getImageUri() == null ? View.GONE : View.VISIBLE);
     }
 
     protected void showImage(Uri uri) {
-        ImageUtils.showThumbnailImage(getActivity(), imageView, note.getImageUri());
+        ImageUtils.showThumbnailImage(getActivity(), imageView, mNote.getImageUri());
     }
 
     @Override
     public void onClick(View v) {
-        Uri uri = note.getImageUri();
+        Uri uri = mNote.getImageUri();
         Intent intent = new Intent(getActivity(), ShowImageActivity.class);
         intent.putExtra(ShowImageActivity.PICTURE_URI_KEY, uri);
         startActivity(intent);
@@ -126,14 +153,20 @@ public class ViewNoteFragment extends Fragment
 
         switch (item.getItemId()) {
             case R.id.menu_edit_note :
-                mCallback.onNoteActionSelected(note, Constants.Action.EDIT);
+                mCallback.onNoteActionSelected(mNote, Constants.Action.EDIT);
                 return true;
             case R.id.menu_delete_note:
-                mCallback.onNoteActionSelected(note, Constants.Action.DELETE);
+                mCallback.onNoteActionSelected(mNote, Constants.Action.DELETE);
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDetach() {
+        mCallback = null;
+        super.onDetach();
     }
 
 }

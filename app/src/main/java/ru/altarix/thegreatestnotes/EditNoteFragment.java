@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,6 +46,7 @@ public class EditNoteFragment extends ViewNoteFragment {
     @Override
     public void onResume() {
         super.onResume();
+        // FIXME: 08.10.17 тут что-то не то
         /*
         Получилось как в сказке про дудочку и кувшинчик. Есть кувшинчик - нет дудочки и наоборот.
         Один способ показа клавиатуры работает только при смене фрагментов,
@@ -64,10 +66,10 @@ public class EditNoteFragment extends ViewNoteFragment {
         View contentView = getView();
         TextInputLayout layoutEditTitle = (TextInputLayout) contentView.findViewById(R.id.layout_edit_title);
         TextInputLayout layoutEditNote = (TextInputLayout) contentView.findViewById(R.id.layout_edit_note);
-        layoutEditTitle.setHint(getString(action == Action.CREATE
+        layoutEditTitle.setHint(getString(mAction == Action.CREATE
                 ? R.string.hint_enter_title
                 : R.string.hint_edit_title));
-        layoutEditNote.setHint(getString(action == Action.CREATE
+        layoutEditNote.setHint(getString(mAction == Action.CREATE
                 ? R.string.hint_enter_note
                 : R.string.hint_edit_note));
 
@@ -88,7 +90,7 @@ public class EditNoteFragment extends ViewNoteFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE) {
             Uri imageUri = data.getData();
-            note.setImageUri(imageUri);
+            mNote.setImageUri(imageUri);
             prepareImageView();
         }
     }
@@ -113,10 +115,10 @@ public class EditNoteFragment extends ViewNoteFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void saveNote() {
-        note.setTitle(textTitle.getText().toString());
-        note.setText(textNote.getText().toString());
-        mCallback.onNoteActionSelected(note, Constants.Action.SAVE);
+    public void saveNote() {
+        mNote.setTitle(textTitle.getText().toString());
+        mNote.setText(textNote.getText().toString());
+        mCallback.onNoteActionSelected(mNote, Constants.Action.SAVE);
     }
 
     protected void choosePictureFromGallery() {
@@ -131,4 +133,22 @@ public class EditNoteFragment extends ViewNoteFragment {
 
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
+
+    public boolean isSavingRequired() {
+        if (mAction == Action.CREATE) {
+            return !isEmptyInput();
+        }
+        return !isInputEqualsNote(mNote);
+    }
+
+    public boolean isEmptyInput() {
+        return TextUtils.isEmpty(textTitle.getText())
+                && TextUtils.isEmpty(textNote.getText());
+    }
+
+    public boolean isInputEqualsNote(Note note) {
+        return TextUtils.equals(note.getTitle(), textTitle.getText())
+                && TextUtils.equals(note.getText(), textNote.getText());
+    }
+
 }

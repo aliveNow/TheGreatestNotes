@@ -21,12 +21,13 @@ public class Constants {
         public static final int NOTES = 30;
     }
 
+    // FIXME: 06.10.17 переименовать!
     public enum Action {
         NONE,
         CREATE,
         VIEW,
         EDIT,
         SAVE,
-        DELETE
+        DELETE;
     }
 }

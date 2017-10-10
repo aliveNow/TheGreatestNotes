@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Заметки</string>
 
-    <string name="title_activity_create_note">Новая заметка</string>
-    <string name="title_activity_edit_note">Редактирование заметки</string>
-    <string name="title_activity_view_note">Просмотр заметки</string>
+    <string name="title_fragment_create_note">Новая заметка</string>
+    <string name="title_fragment_edit_note">Редактирование заметки</string>
+    <string name="title_fragment_view_note">Просмотр заметки</string>
     <string name="menu_save_note">Сохранить</string>
     <string name="menu_edit_note">Редактировать</string>
     <string name="menu_remove_note">Удалить</string>
@@ -19,6 +19,9 @@
     <string name="msg_such_action_not_exist">Такого действия нет</string>
     <string name="msg_note_saved">Заметка сохранена</string>
     <string name="msg_note_deleted">Заметка \"%s\" удалена</string>
+    <string name="msg_is_saving_required">Сохранить редактируемую заметку?</string>
+    <string name="button_save">Сохранить</string>
+    <string name="button_cancel">Отмена</string>
     <string name="msg_null">NULL</string>
     <string name="error_invalid_uri">Invalid uri: %s</string>
     <string name="error_db_operation_failed">Database operation failed: %s</string>
